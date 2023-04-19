@@ -1,0 +1,43 @@
+#練習：請從給定的 DataFrame 分別篩選出符合條件的資料：
+
+# - 1. filtered by first column > 20?
+
+# - 2. filtered by first column + second column > 50
+
+# - 3. filtered by first column < 30 or second column > 30
+
+# - 4. filtered by total sum of row > 100
+
+❏ Sample Code：
+
+import pandas as pd
+import numpy as np
+df = pd.DataFrame(np.random.randint(10, 40, 60).reshape(-1, 4))
+
+# - 1. filtered by first column > 20?
+'''
+filtered1 = df[df.iloc[:, 0] > 20]
+
+#這段程式碼會選出 df 這個 DataFrame 中，第一欄大於 20 的資料列，並儲存在 `filtered1` 變數中。
+'''
+
+# - 2. filtered by first column + second column > 50
+'''
+filtered2 = df[df.iloc[:, 0] + df.iloc[:, 1] > 50]
+
+這段程式碼會選出 df 這個 DataFrame 中，第一列與第二列的和大於 50 的資料列，並儲存在 `filtered2` 變數中。
+'''
+
+# - 3. filtered by first column < 30 or second column > 30
+'''
+filtered3 = df[(df.iloc[:, 0] < 30) | (df.iloc[:, 1] > 30)]
+
+這段程式碼會選出 df 這個 DataFrame 中，第一列小於 30 或第二列大於 30 的資料列，並儲存在 `filtered3` 變數中。
+'''
+
+# - 4. filtered by total sum of row > 100
+'''
+filtered4 = df[df.sum(axis=1) > 100]
+
+這段程式碼會選出 df 這個 DataFrame 中，列總和大於 100 的資料列，並儲存在 `filtered4` 變數中。這裡利用了 Pandas 中 DataFrame 的 `sum()` 方法，`axis=1` 表示對每一列求和，並返回和的總和大於 100 的資料列。
+'''
