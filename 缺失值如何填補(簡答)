@@ -1,0 +1,355 @@
+
+
+1. `NaN` 和 `None` 是不一樣的。在 Pandas 中，`NaN` 代表缺失值，而 `None` 代表 Python 中的 `None` 值。兩者之間的差異在於，使用不同的函式和方法時處理缺失值和 Python中的 `None` 值方法不同。
+
+2. 這是因為平均數和眾數反映了資料中的集中趨勢，而將空缺值補上「集中趨勢」相對較為合理。補平均將會使資料的分佈保持不變，因此比較適用於連續數值，而補眾數將會該改分佈的可能性較低，因此比較適用於離散數值。 
+
+3. 統計內差/回歸或機器學習的方法，可能會在某些情況下有更好的效果，因為對資料進行更複雜的分析可以更好地利用資料集中的特徵和分佈情況進行填補。然而，這些方法需要更多的計算資源和技術知識，可能帶來更高的代價，因此需要在每個個體案例中綜合考慮使用這些方法的成本和收益。
+
+4. `Label-Encoding` 通常用於將「有序」的資料轉換為數字，例如將學生的成績轉換為數字，在這種情況下，資料中的每個值都有一個「有序」的意義。而 `One-Hot-Encoding` 則用於將「無序」的資料轉換為 0 或 1 的二進位制值，例如將狗、貓和鳥作為特徵，它們沒有大小或優先順序，因此不能用標籤編碼。
+
+5. 對於手機號碼、郵遞區號和銀行帳號末五碼，建議使用 `Label Encoding`，因此以上三項資料都可以轉換成數字。當然，對於這些資料，可能需要先進行數字化的前置處理。
+
+今天想跟大家聊聊的內容是「資料前處理與資料清理」，資料前處理（Data Preprocessing）指的是收集完資料之後到真正進入模型之前的過程。隨著大數據時代的來臨，擁有更大量、更多元的資料才能夠進行更有效地分析結果。
+
+預習教材
+用 Pandas 操作資料
+缺失值處理策略與方法
+類別欄位轉數值欄位
+預習教材
+第一步，先想請你約讀以下兩篇教學先對這個單元有一個整體的觀念：
+
+資料前處理必須要做的事 - 資料清理與型態調整
+準備資料以增強機器學習
+用 Pandas 操作資料
+Pandas 是 Python 中最常用的資料處理庫之一，它提供了豐富的功能，可以方便地進行資料的前處理和清理。本文將簡要介紹 Python 與 Pandas 用於資料前處理與資料清理的方法，資料前處理是指在進行資料分析前需要對資料進行的處理。常見的資料前處理包括資料選擇、資料過濾、資料排序等等。Pandas 提供了非常方便的方法來處理這些問題。
+
+資料選擇
+
+當資料集很大時，我們可能只需要使用其中的某些資料。Pandas 提供了 loc 和 iloc 方法用於選擇資料。loc 方法可以按照標籤選擇資料，而 iloc 方法可以按照索引位置選擇資料。
+
+import pandas as pd
+
+data = pd.DataFrame({
+    'col1': [1, 2, 3, 4],
+    'col2': [5, 6, 7, 8],
+    'col3': [9, 10, 11, 12]
+})
+
+# 選擇第一列資料
+row = data.loc[0]
+
+# 選擇第一列和第二列資料
+rows = data.loc[[0, 1]]
+
+# 選擇第一列和第二列，以及第一欄和第二欄的資料
+subset = data.loc[[0, 1], ['col1', 'col2']]
+資料過濾
+
+在某些情況下，我們可能需要根據某些條件選擇資料。Pandas 提供了 query 和 boolean indexing 方法用於資料過濾。
+
+import pandas as pd
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, 15],
+    'col2': [16, 9, 18, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 選擇 col1 大於 10 的資料
+subset = data.query('col1 > 10')
+
+# 選擇 col1 大於 10 且 col2 小於 20 的資料
+subset = data[(data['col1'] > 10) & (data['col2'] < 20)]
+資料排序
+
+資料排序可以讓我們更方便地進行分析。Pandas 提供了 sort_values 方法用於資料排序。
+
+import pandas as pd
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, 15],
+    'col2': [16, 9, 18, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 按照 col1 排序
+data.sort_values('col1')
+
+# 按照 col1 和 col2 排序
+data.sort_values(['col1', 'col2'])
+
+# 按照 col1 升序排列，col2 降序排列
+data.sort_values(['col1', 'col2'], ascending=[True, False])
+資料去重
+
+當資料集中有重複的資料時，我們需要將其去除。Pandas 提供了 drop_duplicates 方法用於去除重複的資料。
+
+import pandas as pd
+
+data = pd.DataFrame({
+    'col1': [5, 12, 5, 8, 12],
+    'col2': [16, 9, 16, 18, 9],
+    'col3': [11, 3, 11, 7, 3]
+})
+
+# 去除重複資料
+data.drop_duplicates()
+這個 dataframe 包含了 5 個列和 3 個欄，每一個列都有 col1、col2 和 col3 這三個欄位的數據。由於前兩列和後兩列的 col1 和 col2 都是一樣的，因此如果使用 drop_duplicates() 函數，這些重複的資料就會被刪除。
+
+缺失值處理策略與方法
+Missing Value，又稱為缺失值，是指在資料集中缺少一些值或是該值無法表示或測量的情況。常見的 Missing Value 表示方式包括 NaN 和 None。
+
+NaN（Not a Number）表示一個非數值，通常在數值運算中出現，例如 0/0、∞/∞ 等。在 Pandas 中，NaN 會被當作一個浮點數來處理。
+None 表示缺少一個正確的值，通常出現在物件運算中。在 Pandas 中，None 會被當作一個 Python 物件來處理。
+利用 Pandas 處理 Missing Value 的函式
+
+在 Pandas 中，可以使用 isnull、notnull 和 fillna 方法來處理 Missing Value。
+
+`isnull()` 方法可以判斷一個資料集是否存在 Missing Value，並返回一個布林值的資料集，True 表示為 Missing Value：
+
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 檢查缺失值
+data.isnull()
+這個 dataframe 包含了 4 個列和 3 個欄，其中有一些缺失值。使用 isnull() 函數可以檢查出哪些資料是缺失值，這些缺失值會被標記為 True，而其他資料則會被標記為 False。
+
+`notnull()` 方法則與 isnull 方法相反，返回 True 表示非 Missing Value：
+
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 檢查非缺失值
+data.notnull()
+使用 notnull() 函數可以檢查哪些資料是非缺失值，這些非缺失值會被標記為 True，而其他資料則會被標記為 False。
+
+`fillna()` 方法可以將 Missing Value 填充為指定的值：
+
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 將所有缺失值填充為 0
+data.fillna(0)
+使用 fillna() 函數可以將缺失值填充為指定的數值，這個例子中是 0。
+
+Missing Value 的處理策略
+
+當遇到 Missing Value 時，我們需要選擇一個適當的處理策略。以下是一些常見的 Missing Value 處理策略。
+
+① 刪除含有 Missing Value 的行
+
+刪除含有 Missing Value 的行是一個常見的處理策略，但需要注意的是，刪除行可能會導致資料損失，因此需要根據具體情況進行決策。
+
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 刪除所有含有缺失值的行
+data.dropna()
+② 刪除含有過多 Missing Value 的列
+
+當一列中含有過多的 Missing Value 時，可以考慮刪除該列。
+
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 刪除所有遺失值過多的列
+data.dropna(thresh=2)
+③ 填充 Missing Value
+
+如果缺失值的原因是資料蒐集上的問題，例如問卷調查中的未回答問題，則可以使用常數填充 Missing Value。
+
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 將所有缺失值填充為 0
+data.fillna(0, inplace=True)
+如果你想要修改原始 dataframe，必須將 inplace 參數設為 True。
+
+使用平均值、中位數或眾數填充 Missing Value 是一種常見的方法。可以使用 Pandas 的 mean、median 或 mode 方法來計算平均值、中位數或眾數。
+
+import pandas as pd
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 將所有缺失值填充為平均值
+data.fillna(data.mean(), inplace=True)
+
+# 將所有缺失值填充為中位數
+data.fillna(data.median(), inplace=True)
+
+# 將所有缺失值填充為眾數
+data.fillna(data.mode()[0], inplace=True)
+④ 使用插值法填充 Missing Value
+
+插值法是一種常見的填充 Missing Value 的方法，可以使用 Pandas 的 interpolate 方法實現。
+
+import pandas as pd
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 使用插值法填充缺失值
+data.interpolate()
+⑤ 使用機器學習算法填充 Missing Value
+
+機器學習算法可以用於填充 Missing Value，例如 K-Nearest Neighbor（KNN）算法。KNN 算法可以根據與缺失值最接近的 k 個樣本的值來填充缺失值。
+
+import pandas as pd
+from sklearn.impute import KNNImputer
+
+data = pd.DataFrame({
+    'col1': [5, 12, 8, np.nan],
+    'col2': [16, 9, np.nan, 4],
+    'col3': [11, 3, 7, 20]
+})
+
+# 使用 KNN 算法填充缺失值
+imputer = KNNImputer(n_neighbors=2)
+data_imputed = pd.DataFrame(imputer.fit_transform(data), columns=data.columns)
+需要注意的是，填充 Missing Value 的方法應根據具體情況進行選擇，並在填充前先對資料集進行分析，以確定缺失值的原因和出現模式。
+
+類別欄位轉數值欄位
+在進行資料分析時，有時需要將類別欄位轉換為數值欄位，以便進行數值計算和機器學習模型訓練等操作。由於模型是基於數學模型設計的方法，必須要輸入資料將類別欄位轉換為數值欄位模型才能讀得懂。例如，某個欄位的取值為「男」和「女」，可以將其轉換為數值欄位，例如「0」表示男性，「1」表示女性。這樣可以讓機器學習模型更容易理解和處理資料。Pandas 提供了多種方法來處理類別欄位，包括 Labelencoding 和 One-hot-encdoing。
+
+Pandas 提供的的欄位類型
+
+在 Pandas 中，每個欄位都有一個類型，類型可以是數值、字串、日期等。Pandas 中的欄位類型可以使用 dtype 屬性查詢，常見的欄位類型包括：
+
+int：整數
+float：浮點數
+bool：布林值
+object：字串或混合型別
+datetime：日期或時間
+import pandas as pd
+
+# 建立一個字典，包含各欄位的資料
+data_dict = {'col1': [1, 2, 3, 4],
+             'col2': ['A', 'B', 'C', 'D'],
+             'col3': [0.1, 0.2, 0.3, 0.4]}
+
+# 使用字典建立一個 dataframe
+data = pd.DataFrame(data_dict)
+
+# 查詢每個欄位的類型
+print(data.dtypes)
+這個範例程式碼會建立一個包含三個欄位的 dataframe，欄位名稱分別為 col1、col2 和 col3，分別代表整數、字串和浮點數類型的資料。
+
+類別欄位轉數值欄位
+
+當然，以下是一個簡單的 dataframe 範例，讓我們進行 Labelencoding 和 One-hot-encoding 的操作。
+
+import pandas as pd
+
+# 創建一個包含類別欄位的 dataframe
+df = pd.DataFrame({
+    'id': [1, 2, 3, 4, 5],
+    'category': ['A', 'B', 'C', 'A', 'B']
+})
+
+print(df)
+輸出結果如下：
+
+   id category
+0   1        A
+1   2        B
+2   3        C
+3   4        A
+4   5        B
+Labelencoding
+
+Labelencoding 是一種將類別欄位轉換為數值欄位的方法，它可以將每個類別值映射為一個整數。Pandas 提供了 LabelEncoder 方法來實現 Labelencoding。
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+
+label_encoder = LabelEncoder()
+df['category_labelencoded'] = label_encoder.fit_transform(df['category'])
+
+print(df)
+輸出結果如下：
+
+   id category  category_labelencoded
+0   1        A                      0
+1   2        B                      1
+2   3        C                      2
+3   4        A                      0
+4   5        B                      1
+可以看到，category 欄位被轉換為了 category_labelencoded 欄位，其中類別 A 被轉換為 0，類別 B 被轉換為 1，類別 C 被轉換為 2。
+
+One-hot-encoding
+
+One-hot-encoding 是一種將類別欄位轉換為數值欄位的方法，它可以將每個類別值轉換為一個二進制向量。Pandas 提供了 get_dummies 方法來實現 One-hot-encoding。
+
+import pandas as pd
+
+# 使用 One-hot-encoding 將類別欄位轉換為數值欄位
+df_onehotencoded = pd.get_dummies(df, columns=['category'])
+
+print(df_onehotencoded)
+輸出結果如下：
+
+   id  category_A  category_B  category_C
+0   1           1           0           0
+1   2           0           1           0
+2   3           0           0           1
+3   4           1           0           0
+4   5           0           1           0
+可以看到，category 欄位被轉換為了 category_A、category_B 和 category_C 三個數值欄位。對於每個類別，都創建了一個新的欄位，其值為 0 或 1，對應於原來的類別值。
+
+在 One-hot-encoding 中，每個類別值被轉換為一個二進制向量，向量的長度等於類別數量。使用 One-hot-encoding 可以避免數值欄位中出現偏差，例如 Labelencoding 中使用的整數值可能會被機器學習模型誤解為具有順序關係，而 One-hot-encoding 中的二進制向量則不會出現這樣的問題。
+
+延伸閱讀
+最後也提供幾個延伸閱讀的素材，請大家檢閱一下是自是否能夠掌握這個範圍內的必備知識點：
+
+Kaggle 提供的免費課程「Data Cleaning」部分 ← 必修教材
+如果你還有時間想深入 Pandas 的進階用法的話可以看看以下單元：
+
+Working with missing data ← 選修
+Merge, join, concatenate and compare ← 選修
+Group by: split-apply-combine ← 選修（進階）
+Reshaping and pivot tables ← 選修（進階）
