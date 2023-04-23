@@ -12,6 +12,9 @@ df = pd.read_csv('https://data.nhi.gov.tw/resource/Nhi_Fst/Fstdata.csv')
 df['縣市'] = df['醫事機構地址'].str.split('市').str[0]
 df['縣市'] = df['縣市'].str.split('縣').str[0]
 
+
 df.groupby('縣市').agg({'快篩試劑截至目前結餘存貨數量': 'sum'}).sort_values(by='快篩試劑截至目前結餘存貨數量', ascending=False).head(5)
 result = df.groupby('縣市').agg({'快篩試劑截至目前結餘存貨數量': 'sum'}).sort_values(by='快篩試劑截至目前結餘存貨數量', ascending=False).head(5)
 print(result)
+
+
