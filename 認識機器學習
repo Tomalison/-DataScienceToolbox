@@ -1,0 +1,385 @@
+今天的主題是「機器學習模型實作」，機器學習能夠利用現有資料預測未來資料，是近年來資料科學中相當重要的算法。機器學習演算法是一類從資料中自動分析獲得規律，並利用規律對未知資料進行預測的演算法。
+
+機器學習與資料科學
+統計、機器學習、資料探勘是分別從不同領域中發展出來的學科，但他們現在都會收入在「資料科學」這個大科目之中：
+
+
+機器學習是人工智慧的一個分支，人工智慧從以「推理」為重點，到以「知識」為重點，再到以「學習」為重點的自然、清晰的脈絡。機器學習理論主要是設計和分析讓電腦可以自動「學習」的演算法，從資料中獲得規律，並利用規律對未知資料進行預測。學習算法中涉及了大量的統計學理論與推斷統計學，因此也被稱為統計學習理論。演算法設計方面，機器學習理論關注可以實現的的學習演算法。很多推論問題屬於無程式可循難度，所以部分的機器學習研究是開發容易處理的近似演算法。簡而言之， 人工智慧跟資料探勘是一種目的，而機器學習是參考統計而延伸出的方法。
+
+監督式學習與非監督式學習
+機器學習的模型分為「監督式學習」和「非監督式學習」兩種類型：
+
+監督式學習（Supervised learning）是由訓練資料中學到或建立一個模型（learning model），並依此模式推測新的實例。訓練資料是由特徵和標籤所組成，目標/標籤可以是連續的數值（迴歸），也可以有限可能的類別（分類）。
+
+→ 監督式學習是一種根據已知的答案去找出欄位跟欄位之間的關係的方法。
+
+無監督學習是機器學習的一種方法，沒有給定事先標記過的訓練範例，對輸入的資料進行分組或分群。無監督學習的主要運用包含：聚類分析、關聯規則、維度縮減，可以在沒有明確目標的情況下找出資料間的關係。
+
+→ 非監督式學習是利用資料跟資料的關係把類似的資料當成同一群的方法。
+
+關於機器學習常見的模型跟觀念，可以參考我之前分享過的「機器學習的分類和分群」影片。
+
+1. 機器學習可以分成「監督式學習」與「非監督式學習」，請分別舉一個應用的例子。
+
+- 監督式學習：手寫辨識。透過訓練資料集中已經標示好的數字(Image)和實際數字(Label)，建構出一個機器學習模型，之後當我們告訴機器圖片為何時，可透過這個模型來進行辨識。
+
+- 非監督式學習：k-mean群聚演演算法。又稱為k-mean聚類演演算法，是一個常用的非監督式演演算法，用於將大量資料標籤有所不同的資料，分成不同的群組。例如: 分析消費者行為模式時，可以將客戶分成不同的族群，以瞭解不同族群的消費行為模式，進而提升行銷策略。
+
+2. 線性回歸（Linear Regression）能夠利用一個條線代表一組資料的分佈，請問線性回歸是如何找出代表資料點的線？
+
+線性回歸可用於衡量兩個連續資料變數之間的相關性。回歸線表示資料之間的關係，最簡單的回歸線為一條直線 y = mx + b，在機器學習中的線性回歸是調整m和b使得所有資料點和線之間的距離最小，來建立和訓練一個預測模型。
+
+3. 通常越複雜的模型越有可能出現過擬合（Overfitting）的狀況，請問什麼是 Overfitting 呢？實際上又該怎麼避免或解決？
+
+Overfitting 意指機器學習模型在學習訓練資料時，把資料特性學得太好了，以致於訓練資料及可能產生的噪聲都被學得太好，反而預測資料表現不佳。能解決的方式對應到 Bias-Variance Trade-Off 的問題，即：藉由調整模型的複雜度(如決策樹)及模型訓練資料量，讓模型得到一可接受的bias（偏誤）及variance(方差)。
+
+4. 承上題，要如何從模型的結果中觀察到可能出現過擬合（Overfitting）的狀況？
+
+可透過比較模型在訓練資料及驗證資料的表現，若模型在訓練資料上表現很好，但在驗證資料中表現不佳，這代表了模型出現了 Overfitting 的情況。
+
+5. PCA 模型能夠將高維度的資料集轉換成比較低的維度，請問什麼情況下該這麼做？
+
+當資料維度很高時，難以從資料分析結果中得到真正有用的資訊，如何透過資料探索將資料經由主成分分析降維成二度或三度空間，便於人腦的不同視覺效能，可以輕易看出不同型別或類群的資料分佈情況，或同時參考不同類別間的相似性程度，達到視覺化突出與解釋性高的目的。
+
+
+在 Python 中實現機器學習
+機器學習是一種利用統計學方法和電腦演算法來建立模型，以從資料中學習並做出預測的科技。Python 是一種廣泛使用於機器學習的程式語言，scikit-learn 則是一個常用於 Python 中的機器學習函式庫。在本篇教材中，我們將介紹如何利用 scikit-learn 實現監督式學習和非監督式學習的機器學習算法。
+
+scikit-learn 套件的介紹與使用
+scikit-learn 是一個用於機器學習的 Python 套件，提供了豐富的機器學習算法和工具，並且易於使用。它支持監督式學習、非監督式學習和強化學習等多種機器學習方法。scikit-learn 提供了一致的 API，讓使用者可以方便地進行模型訓練、預測和評估。它還提供了豐富的資料集和工具，用於資料預處理、特徵提取和降維等。
+
+資料集模組
+
+scikit-learn 中提供了許多常用的資料集，可以用於模型訓練和測試。這些資料集可以通過 scikit-learn.datasets 模組輕鬆地獲取。例如：
+
+from sklearn.datasets import load_iris
+
+iris = load_iris()
+X = iris.data
+y = iris.target
+除此之外，你可以從官方文件中的 7.1. Toy datasets 得到更多的資料集。
+
+監督式學習
+監督式學習是指在訓練過程中，資料樣本標有正確的標籤或結果，機器學習模型學習從輸入數據中將輸入和輸出關係建立起來的學習方式。scikit-learn 中支援多種監督式學習算法，包括：
+
+線性回歸：LinearRegression、Ridge、Lasso 等。
+分類算法：LogisticRegression、SVM、KNN、決策樹、隨機森林等。
+線性迴歸 (Linear Regression)
+
+線性迴歸是一個簡單但常用的監督式學習算法，用於預測一個連續型變數的值。在 scikit-learn 中，可以使用 LinearRegression 類進行線性迴歸：
+
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+其中，X_train 是訓練資料的輸入，y_train 是訓練資料的輸出，X_test 是測試資料的輸入，y_pred 是模型對測試資料的輸出預測。
+
+接下來這個例子使用了 scikit-learn 中內置的 Boston 房價數據集，並將其切分為訓練集和測試集，然後使用 LinearRegression 模型進行訓練和預測：
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# 載入 Boston 房價數據集
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
+data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+target = raw_df.values[1::2, 2]
+X, y = data, target
+
+
+# 切分訓練集和測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 創建線性回歸模型
+model = LinearRegression()
+
+# 訓練模型
+model.fit(X_train, y_train)
+
+# 使用模型進行預測
+y_pred = model.predict(X_test)
+決策樹 (Decision Tree)
+
+決策樹是一種樹狀模型，可以用於分類和回歸問題。在 scikit-learn 中，可以使用 DecisionTreeClassifier 和 DecisionTreeRegressor 類進行決策樹模型的建立：
+
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+model = DecisionTreeRegressor()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+其中，DecisionTreeClassifier 用於分類問題，DecisionTreeRegressor 用於回歸問題。
+
+使用了 scikit-learn 中內置的 iris 和 Boston 房價數據集作為輸入，分別進行分類和回歸問題的範例。使用 DecisionTreeClassifier 模型進行 iris 的分類問題，使用 DecisionTreeRegressor 模型進行 Boston 房價的回歸問題，並將其分別切分為訓練集和測試集，進行模型的訓練和預測。
+
+載入 iris 房價數據集分類問題範例：
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+# 分類問題範例
+# 載入 iris 數據集
+data = load_iris()
+
+# 切分訓練集和測試集
+X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.3, random_state=42)
+
+# 創建分類樹模型
+clf_model = DecisionTreeClassifier()
+
+# 訓練模型
+clf_model.fit(X_train, y_train)
+
+# 使用模型進行預測
+y_pred_clf = clf_model.predict(X_test)
+載入 Boston 房價數據集回歸問題範例：
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+
+
+# 回歸問題範例
+# 載入 Boston 房價數據集
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
+data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+target = raw_df.values[1::2, 2]
+X, y = data, target
+
+
+# 切分訓練集和測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
+# 創建回歸樹模型
+reg_model = DecisionTreeRegressor()
+
+# 訓練模型
+reg_model.fit(X_train, y_train)
+
+# 使用模型進行預測
+y_pred_reg = reg_model.predict(X_test)
+隨機森林 (Random Forest)
+
+隨機森林是一種集成學習方法，將多個決策樹組合在一起，通過投票或平均等方式來做出最終預測。在 scikit-learn 中，可以使用 RandomForestClassifier 和 RandomForestRegressor 類進行隨機森林模型的建立：
+
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+model = RandomForestRegressor()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+接下來以自定義的 iris 資料集轉換成 dataframe 示範 RandomForestRegressor：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+
+# 分類問題範例
+# 創建 iris 自定義資料集
+iris_data = {
+    'sepal_length': [5.1, 4.9, 4.7, 4.6, 5.0, 6.2, 6.4, 6.0, 6.9, 6.3, 5.8, 5.4, 5.6, 5.1, 5.7],
+    'sepal_width': [3.5, 3.0, 3.2, 3.1, 3.6, 2.9, 2.8, 3.0, 3.1, 2.5, 2.8, 3.0, 2.7, 3.8, 2.8],
+    'petal_length': [1.4, 1.4, 1.3, 1.5, 1.4, 4.3, 5.6, 4.8, 5.1, 5.0, 4.0, 4.5, 4.2, 1.6, 4.5],
+    'petal_width': [0.2, 0.2, 0.2, 0.2, 0.2, 1.3, 2.2, 1.8, 2.3, 1.9, 1.2, 1.5, 1.3, 0.2, 1.3],
+    'species': ['setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'virginica', 'virginica', 'virginica', 'virginica', 'virginica', 'versicolor', 'versicolor', 'versicolor', 'versicolor', 'versicolor']
+}
+
+# 轉換為 dataframe
+iris_df = pd.DataFrame(iris_data)
+
+# 將類別變量轉換為數值變量
+iris_df['species'] = pd.factorize(iris_df['species'])[0]
+
+# 分割資料為訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(iris_df.drop(columns=['sepal_length']), iris_df['sepal_length'], test_size=0.3, random_state=42)
+
+# 創建分類森林模型
+reg_model = RandomForestRegressor()
+
+# 訓練模型
+reg_model.fit(X_train, y_train)
+
+# 使用模型進行預測
+y_pred_reg = reg_model.predict(X_test)
+y_pred_reg
+接下來以自定義的 iris 資料集轉換成 dataframe 示範 RandomForestClassifier：
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# 分類問題範例
+# 創建 iris 自定義資料集
+iris_data = {
+    'sepal_length': [5.1, 4.9, 4.7, 4.6, 5.0, 6.2, 6.4, 6.0, 6.9, 6.3, 5.8, 5.4, 5.6, 5.1, 5.7],
+    'sepal_width': [3.5, 3.0, 3.2, 3.1, 3.6, 2.9, 2.8, 3.0, 3.1, 2.5, 2.8, 3.0, 2.7, 3.8, 2.8],
+    'petal_length': [1.4, 1.4, 1.3, 1.5, 1.4, 4.3, 5.6, 4.8, 5.1, 5.0, 4.0, 4.5, 4.2, 1.6, 4.5],
+    'petal_width': [0.2, 0.2, 0.2, 0.2, 0.2, 1.3, 2.2, 1.8, 2.3, 1.9, 1.2, 1.5, 1.3, 0.2, 1.3],
+    'species': ['setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'virginica', 'virginica', 'virginica', 'virginica', 'virginica', 'versicolor', 'versicolor', 'versicolor', 'versicolor', 'versicolor']
+}
+
+# 轉換為 dataframe
+iris_df = pd.DataFrame(iris_data)
+
+# 分割資料為訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(iris_df.drop(columns=['species']), iris_df['species'], test_size=0.3, random_state=42)
+
+# 創建分類森林模型
+clf_model = RandomForestClassifier()
+
+# 訓練模型
+clf_model.fit(X_train, y_train)
+
+# 使用模型進行預測
+y_pred_clf = clf_model.predict(X_test)
+y_pred_clf
+支持向量機 (Support Vector Machine)
+
+支持向量機是一種二元分類和回歸分析的機器學習方法，通過將資料映射到高維空間，尋找超平面來分類或回歸。在 scikit-learn 中，可以使用 SVM 類進行支持向量機模型的建立：
+
+from sklearn.svm import SVC, SVR
+
+model = SVC()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+model = SVR()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+其中，SVC 用於分類問題，SVR 用於回歸問題。
+
+以下是一個自定義的範例資料示範 SVM 分類與回歸模型的使用：
+
+import numpy as np
+from sklearn.svm import SVC, SVR
+from sklearn.model_selection import train_test_split
+
+# 自定義範例資料
+X = np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7]])
+y_classification = np.array([0, 0, 0, 1, 1, 1])
+y_regression = np.array([1, 2, 3, 4, 5, 6])
+
+# 切分訓練集與測試集
+X_train, X_test, y_train_classification, y_test_classification, y_train_regression, y_test_regression = train_test_split(
+    X, y_classification, y_regression, test_size=0.2, random_state=42)
+
+# 使用 SVM 分類器進行分類
+model = SVC()
+model.fit(X_train, y_train_classification)
+y_pred_classification = model.predict(X_test)
+
+# 使用 SVM 迴歸器進行回歸
+model = SVR()
+model.fit(X_train, y_train_regression)
+y_pred_regression = model.predict(X_test)
+這裡的範例資料 X 為一個二維陣列，包含了六個樣本，每個樣本有兩個特徵：
+
+y_classification 為一個包含了六個元素的陣列，代表了 X 中每個樣本的分類標籤，0 表示負類，1 表示正類
+y_regression 為一個包含了六個元素的陣列，代表了 X 中每個樣本的回歸標籤。
+接著使用 train_test_split 函數將資料切分成訓練集和測試集，並且分別取出分類和回歸標籤。最後使用 SVC 和 SVR 分別建立 SVM 分類和回歸模型，並用 fit 方法將模型擬合到訓練資料上。接著使用 predict 方法對測試資料進行預測，並將預測結果存到 y_pred_classification 和 y_pred_regression 變數中。
+
+非監督式學習
+非監督式學習是指在訓練過程中，資料樣本沒有標籤或結果，機器學習模型通過尋找資料的結構和相似性來學習。在 scikit-learn 中，支援多種非監督式學習算法，包括：
+
+聚類算法：KMeans、DBSCAN、階層分群等。
+降維算法：PCA、t-SNE、LLE 等。
+K-Means 聚類 (K-Means Clustering)
+
+K-Means 聚類是一種常用的非監督式學習算法，用於將資料分為 k 個不同的群體。在 scikit-learn 中，可以使用 KMeans 類進行 K-Means 聚類：
+
+from sklearn.cluster import KMeans
+
+model = KMeans(n_clusters=3)
+model.fit(X_train)
+y_pred = model.predict(X_test)
+其中，n_clusters 是要分類的群體數量。
+
+以下我們使用 scikit-learn 內建的 iris 資料集示範 KMeans 分群的使用方式。我們先載入資料集，並將其轉換為 pandas dataframe 的格式：
+
+from sklearn.datasets import load_iris
+import pandas as pd
+
+# 載入 iris 資料集
+iris = load_iris()
+
+# 轉換為 pandas dataframe
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = iris.target
+接著，我們將資料集分為訓練集和測試集：
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+然後，我們使用 KMeans 分群器對訓練集進行訓練：
+
+from sklearn.cluster import KMeans
+
+# 建立 KMeans 分群器
+kmeans = KMeans(n_clusters=3, random_state=42)
+
+# 對訓練集進行訓練
+kmeans.fit(X_train)
+最後，我們使用訓練好的 KMeans 分群器對測試集進行預測：
+
+# 對測試集進行預測
+y_pred = kmeans.predict(X_test)
+主成分分析 (Principal Component Analysis, PCA)
+
+主成分分析是一種降維算法，通過將高維資料映射到低維空間，保留最重要的特徵來簡化資料。在 scikit-learn 中，可以使用 PCA 類進行主成分分析：
+
+from sklearn.decomposition import PCA
+
+model = PCA(n_components=2)
+X_train_pca = model.fit_transform(X_train)
+X_test_pca = model.transform(X_test)
+其中，n_components 是要降維到的維度數量。
+
+以下示範利用PCA降維，將高維度的資料轉換為二維或更低維度的資料：
+
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+
+# 讀取手寫數字資料集
+digits = load_digits()
+
+# 將特徵與標籤拆開
+X = digits.data
+y = digits.target
+
+# 切分資料集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 建立PCA模型，將64維的特徵轉換為2維
+model = PCA(n_components=2)
+X_train_pca = model.fit_transform(X_train)
+X_test_pca = model.transform(X_test)
+
+# 顯示轉換後的訓練集資料
+df = pd.DataFrame(data=X_train_pca, columns=['PC1', 'PC2'])
+df['target'] = y_train
+print(df.head())
+執行後可以得到一個二維的DataFrame資料，其中前兩欄為PCA轉換後的兩個主成分，第三欄為對應的標籤。
+
+延伸閱讀
+機器學習在 Python 中的實現主要會仰賴「 scikit-learn 」套件，除了上述的內容之外 scikit-learn 還有更多細節的操作與用法，我們也挑選了以下的延伸教材指定閱讀：
+
+Your First Machine Learning Model ← 必修教材
+Model Validation ← 必修教材
+An introduction to machine learning with scikit-learn ← 必修教材
+Scikit Learn Tutorial ← 選修教材
