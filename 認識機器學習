@@ -58,7 +58,7 @@ iris = load_iris()
 X = iris.data
 y = iris.target
 除此之外，你可以從官方文件中的 7.1. Toy datasets 得到更多的資料集。
-
+https://scikit-learn.org/stable/datasets/toy_dataset.html
 監督式學習
 監督式學習是指在訓練過程中，資料樣本標有正確的標籤或結果，機器學習模型學習從輸入數據中將輸入和輸出關係建立起來的學習方式。scikit-learn 中支援多種監督式學習算法，包括：
 
