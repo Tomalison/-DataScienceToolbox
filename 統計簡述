@@ -1,0 +1,279 @@
+https://dscareer.kolable.app/programs/9bb10c37-9d10-4dc8-9350-3b21b06b1b44/contents/ea633aac-f40d-4f59-9f99-e17f5fcb57e9?back=members_3c165a8c-f44c-47b7-af1b-b46de60333f1
+
+1. 請問「質化資料 (qualitative data) 」與「量化資料 (quantitative data) 」差別是什麼？
+
+質化資料是指觀察、分析、描述非數字化的資料，例如文字、影像、聲音等；量化資料是指可以轉換成數值的資料，例如身高、體重、年齡等。
+
+2. 描述統計中有三組指標「最大值、最小值和總和」、「眾數、均值和中位數」和「變異數、標準差、斜方差和分位數」 ，請問這三組分別可以看出資料的哪些趨勢？
+
+第一組可以看出資料的取值範圍，有助於瞭解資料的分散程度；第二組可以看出資料的分佈情況和趨勢，有助於瞭解資料的集中程度；第三組可以看出資料的分散程度和分位情況，有助於瞭解資料的變異程度。
+
+3. 相關係數分析能夠看出兩組資料間的關係，請問什麼叫做「正相關」、「無相關」與「負相關」？
+
+正相關指的是兩組資料的變化方向是一致的，即當一組資料增加時，另一組資料也會增加；負相關指的是兩組資料的變化方向是相反的，即當一組資料增加時，另一組資料會減少；無相關指的是兩組資料之間沒有顯著的關係。
+
+4. 在統計中有一句話叫做「Correlation is not causation.」，這句話的想表達的含義是什麼呢？
+
+這句話的意思是，兩組資料之間的相關性並不代表其中一個因素一定會導致另一個因素，還需要進一步的分析才能確定因果關係。
+
+
+5. 模型的誤差可以分為「Bias」和「Variance」，請解釋這兩者分別代表什麼誤差？
+
+偏差（Bias）代表模型本身的預測能力，衡量了模型在整體資料中是否找到了正確的趨勢；變異（Variance）代表模型的穩定性，衡量了模型對於不同樣本資料的響應程度。 Bias 和 Variance 都是模型誤差中的兩種基本成分。
+
+接下來介紹如何在 Python 中實現統計學，如果是描述統計的部分可以如何利用 Pandas 中 DataFrame 內建的方法；也能夠利用 statemodels 幫助我們快速上手推論統計。
+
+在 Python 中實現描述統計
+Pandas 是一個非常方便的工具，可以進行各種資料分析。在進行描述統計時，Pandas 提供了許多方便的函式，可以計算出基本統計量、頻率表、相關係數以及樞紐分析表等。接下來介紹如何在 Python 中利用 DataFrame 實現描述統計，開始之前請先複習 Pandas 的官方文件稍作複習：
+
+Python Pandas - Descriptive Statistics ← 必修教材
+How to calculate summary statistics? ← 必修教材
+匯入資料
+
+首先先利用 read_(...) 方法匯入資料，Pandas 支援多種檔案格式，如 CSV、Excel、SQL 等。以下是匯入 CSV 檔案的範例：
+
+import pandas as pd
+
+# 匯入 CSV 檔案
+df = pd.read_csv('data.csv')
+基本統計量
+
+Pandas 提供了許多函式，可以計算出基本統計量，如平均數、標準差、最大值、最小值、中位數等。以下是一些常用的函式：
+
+# 計算平均數
+df.mean()
+
+# 計算標準差
+df.std()
+
+# 計算最大值
+df.max()
+
+# 計算最小值
+df.min()
+
+# 計算中位數
+df.median()
+
+# 計算四分位數
+df.quantile([0.25, 0.5, 0.75])
+頻率表
+
+另外，Pandas 也提供了頻率表的函式，可以計算每個值出現的頻率。以下是一個範例：
+
+# 計算每個值出現的頻率
+df['column'].value_counts()
+其中 column 為要計算頻率的欄位名稱。
+
+相關係數
+
+Pandas 也支援計算相關係數的函式，可以透過 corr() 函式來計算。以下是一個範例：
+
+# 計算相關係數
+df.corr()
+樞紐分析表
+
+當我們需要對資料進行聚合、分組或者透視時，Pandas 的 pivot_table() 函數非常有用。 pivot_table() 可以透過聚合計算或是條件過濾等方式，輕鬆地將資料進行整理和轉換。以下是一個使用 pivot_table() 的範例：
+
+import pandas as pd
+
+
+# 使用 pivot_table 計算分類變數對目標變數的平均值
+pivot = pd.pivot_table(df, values='目標變數', index='分類變數', aggfunc='mean')
+其中，values 為要計算的目標變數名稱，index 為分類變數名稱， aggfunc 為聚合函數，可以是 mean、sum、count 等。pivot_table() 函數會根據指定的 values 和 index 來進行分組和聚合，最終輸出一個透視表。透視表可透過 to_excel() 函數匯出為 Excel 檔案，或是使用其他方式進行呈現。透過 pivot_table() 函數，可以方便地進行資料整理和分析。
+
+以下是一個使用 pivot_table() 函數進行分析的例子。假設我們有一份銷售訂單資料，包含訂單日期、產品名稱、單價、數量和總價等欄位。我們希望透過 pivot_table() 函數，分析每個產品的平均單價和總銷售額。首先，我們可以建立一個包含資料的 DataFrame，並顯示前幾筆資料：
+
+import pandas as pd
+
+# 建立 DataFrame
+data = {
+    '訂單日期': ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05', '2022-01-06', '2022-01-07', '2022-01-08', '2022-01-09', '2022-01-10'],
+    '產品名稱': ['A產品', 'B產品', 'C產品', 'A產品', 'B產品', 'C產品', 'A產品', 'B產品', 'C產品', 'A產品'],
+    '單價': [100, 200, 300, 100, 200, 300, 100, 200, 300, 100],
+    '數量': [10, 20, 30, 10, 20, 30, 10, 20, 30, 10],
+    '總價': [1000, 4000, 9000, 1000, 4000, 9000, 1000, 4000, 9000, 1000]
+}
+
+df = pd.DataFrame(data)
+
+# 顯示前幾筆資料
+print(df.head())
+輸出結果如下：
+
+        訂單日期 產品名稱  單價  數量   總價
+0  2022-01-01  A產品   100  10  1000
+1  2022-01-02  B產品   200  20  4000
+2  2022-01-03  C產品   300  30  9000
+3  2022-01-04  A產品   100  10  1000
+4  2022-01-05  B產品   200  20  4000
+接著，我們使用 pivot_table() 函數進行分析：
+
+# 使用 pivot_table 函數計算每個產品的平均單價和總銷售額
+pivot = pd.pivot_table(df, values=['單價', '總價'], index='產品名稱', aggfunc={'單價':'mean', '總價':'sum'})
+# 輸出分析結果
+print(pivot)
+aggfunc 參數指定了要進行的聚合函數，這裡我們計算平均值（mean）和總和（sum）。
+
+輸出結果如下：
+
+       單價     總價
+產品名稱            
+A產品   100   4000
+B產品   200  12000
+C產品   300  27000
+這樣，我們就成功使用 pivot_table() 函數進行了資料的分析，得到了每個產品的平均單價和總銷售額。
+
+在 Python 中實現推論統計
+如果是推論統計的話，可以試試看「 statemodels 」這個套件。根據官網的介紹，它提供了常見的統計模型，例如估計、檢定和迴歸的方法。我們建議你可以從「 Getting started 」開始，先認識套件的使用流程與第一個 OLS 範例。OLS 全名是 Ordinary Least Squares ，中文稱為最小平方法，是一種統計中擬合數據的方法。
+
+statsmodels 是一個 Python 套件，提供了一系列統計模型和統計測試的工具。它可以用於探索資料、建立模型、進行推論統計和預測分析等多個方面。在這個段落中將介紹如何使用 statsmodels 套件進行推論統計，包括線性回歸分析、假設檢定和ANOVA分析等。
+
+線性回歸分析
+
+線性回歸是統計學中一種常用的模型，用於探索自變量和因變量之間的關係。在 Python 中，我們可以使用 statsmodels 套件中的 ols 函數進行線性回歸分析。以下是一個使用 ols 函數進行線性回歸分析的例子：
+
+import pandas as pd
+import statsmodels.api as sm
+
+# 建立 DataFrame
+data = {
+    'x': [1, 2, 3, 4, 5],
+    'y': [2, 4, 6, 8, 10]
+}
+
+df = pd.DataFrame(data)
+
+# 建立線性回歸模型
+model = sm.formula.ols('y ~ x', data=df).fit()
+
+# 輸出回歸結果
+print(model.summary())
+輸出結果如下：
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 5.582e+30
+Date:                Tue, 25 Apr 2023   Prob (F-statistic):           1.67e-46
+Time:                        12:13:41   Log-Likelihood:                 161.95
+No. Observations:                   5   AIC:                            -319.9
+Df Residuals:                       3   BIC:                            -320.7
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept  -3.109e-15   2.81e-15     -1.107      0.349    -1.2e-14    5.83e-15
+x              2.0000   8.46e-16   2.36e+15      0.000       2.000       2.000
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   0.018
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.770
+Skew:                           0.844   Prob(JB):                        0.680
+Kurtosis:                       2.078   Cond. No.                         8.37
+==============================================================================
+上面的輸出結果中，包含了線性回歸模型的相關統計信息，例如模型的解釋力（R-squared）、F統計量和P值等。此外，我們還可以使用 model.params 屬性獲取模型的參數估計值。
+
+print(model.params)
+輸出結果如下：
+
+Intercept   -3.108624e-15
+x            2.000000e+00
+dtype: float64
+假設檢定
+
+假設檢定是統計學中常用的一種方法，用於判斷一個假設是否應該被拒絕。在 Python 中，我們可以使用 statsmodels 套件進行假設檢定。以下是一個使用 statsmodels 套件進行假設檢定的例子：
+
+import pandas as pd
+import numpy as np
+import statsmodels.stats.api as sms
+
+# 建立 DataFrame
+data = {
+    'group': ['A'] * 5 + ['B'] * 5,
+    'value': [10, 12, 8, 11, 9, 13, 15, 11, 14, 12]
+}
+
+df = pd.DataFrame(data)
+
+# 進行 t 檢定
+result = sms.ttest_ind(df[df['group'] == 'A']['value'], df[df['group'] == 'B']['value'])
+
+# 輸出結果
+print(result)
+輸出結果如下：
+
+(-3.0, 0.017071681233782634, 8.0)
+上面的輸出結果中，第一個值表示 t 統計量，第二個值表示對應的雙尾P值，第三個值表示樣本大小。
+
+ANOVA 分析
+
+ANOVA（Analysis of Variance）分析是統計學中常用的一種方法，用於比較多個樣本組之間的差異。在 Python 中，我們可以使用 statsmodels 套件進行 ANOVA 分析。以下是一個使用 statsmodels 套件進行 ANOVA 分析的例子：
+
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# 建立 DataFrame
+data = {
+    'group': ['A'] * 5 + ['B'] * 5 + ['C'] * 5,
+    'value': [10, 12, 8, 11, 9, 13, 15, 11, 14, 12, 18, 16, 17, 19, 15]
+}
+
+df = pd.DataFrame(data)
+
+# 進行 ANOVA 分析
+model = ols('value ~ group', data=df).fit()
+anova_table = sm.stats.anova_lm(model)
+print(anova_table)
+輸出結果如下：
+
+            df      sum_sq    mean_sq          F    PR(>F)
+group      2.0  123.333333  61.666667  24.666667  0.000056
+Residual  12.0   30.000000   2.500000        NaN       NaN
+上面的輸出結果中，df 表示自由度，sum_sq 表示總平方和，mean_sq 表示平均平方和，F 表示F統計量，PR(>F) 表示對應的雙尾P值。
+
+最後來看一個完整的案例，假設我們有一個醫學研究想要比較三種藥物對疾病治療效果的差異。我們隨機挑選了30位患者，將其隨機分成三組，每組10人，分別給予不同藥物的治療。治療結束後，我們記錄每位患者的治療效果，即治療後的疾病症狀程度。現在，我們想要使用ANOVA分析來比較三種藥物的治療效果是否存在差異。
+
+首先，我們需要將數據整理成一個DataFrame，其中包含每位患者的分組信息和治療效果，代碼如下：
+
+import pandas as pd
+
+# 創建數據
+data = {'group': ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
+                  'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B',
+                  'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
+        'effect': [3.1, 3.3, 3.2, 2.8, 2.9, 3.5, 3.4, 2.9, 3.2, 3.0,
+                   2.8, 2.7, 2.5, 2.4, 2.9, 2.6, 2.5, 2.7, 2.8, 2.6,
+                   1.9, 2.1, 1.8, 1.7, 2.0, 2.2, 2.1, 1.9, 1.8, 1.7]}
+
+df = pd.DataFrame(data)
+接下來，我們可以使用 ols 函數創建一個線性回歸模型，代碼如下：
+
+from statsmodels.formula.api import ols
+
+# 創建線性回歸模型
+model = ols('effect ~ group', data=df).fit()
+然後，我們可以使用 anova_lm 函數進行ANOVA分析，代碼如下：
+
+from statsmodels.stats.anova import anova_lm
+
+# 進行ANOVA分析
+anova_results = anova_lm(model)
+
+# 輸出結果
+print(anova_results)
+在上面的代碼中，anova_lm 函數接受一個線性回歸模型作為參數，然後返回ANOVA分析的結果。將 anova_results 輸出後，我們可以看到ANOVA分析的結果，包括 df（自由度）、sum_sq（平方和）、mean_sq（平均平方和）、F（F值）和 PR(>F)（p值）等指標，代碼輸出如下：
+
+            df    sum_sq   mean_sq           F        PR(>F)
+group      2.0  7.424667  3.712333  102.070265  2.576816e-13
+Residual  27.0  0.982000  0.036370         NaN           NaN
+從上面的結果可以看出，group 的 PR(>F) 值非常小（小於 0.05），意味著三種藥物的治療效果存在顯著差異。因此，我們可以得出結論：三種藥物的治療效果不同。
+
+除此之外關於 statemodels 與統計的內容非常複雜，以下提供一些額外的參考資源可以延伸學習：
+
+什么是线性回归？3分钟带你了解什么是线性回归 ← 選修教材
+Linear Regression ← 選修教材
+Ordinary Least Squares ← 選修教材
+statemodels 中還有包含像是「時間序列 Time Series ← 選修教材」、「自迴歸 ANOVA ← 選修教材」等經典的統計方法，如果你本來就熟悉這些東西的話可以看看在 Python 中可以怎麼做到你原本在 SPSS 或 SAS 中做到的工作，但若你本來對統計沒有太深入的了解那建議可以先跳過。
