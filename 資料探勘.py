@@ -18,9 +18,10 @@ te_ary = te.fit(dataset).transform(dataset)
 df = pd.DataFrame(te_ary, columns=te.columns_)
 #print(df)
 # 計算出頻繁項目集
-frequent_itemsets = apriori(df, min_support=0.6, use_colnames=True)
+frequent_itemsets = apriori(df, min_support=0.3, use_colnames=True)
 #print(frequent_itemsets)
 
 # 計算出關聯規則
-rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+rules.sort_values('confidence', ascending=False, inplace=True)
 print(rules)
