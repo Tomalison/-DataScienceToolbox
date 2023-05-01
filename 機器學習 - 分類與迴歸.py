@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LinearRegression
-
+from sklearn.metrics import accuracy_score
 
 source = 'https://raw.githubusercontent.com/MachineLearningLiuMing/scikit-learn-primer-guide/master/Data.csv'
 
@@ -35,7 +35,8 @@ clf_model.fit(X_train, y_train)
 # 使用模型進行預測
 y_pred_clf = clf_model.predict(X_test)
 print(y_pred_clf)
-
+accuracy = accuracy_score(y_test, y_pred_clf)
+print("Accuracy:", accuracy)
 
 # 利用 Country, Age, Purchased 對 Salary 進行迴歸學習，印出後三筆資料的 Salary 為何
 # 創建線性回歸模型
