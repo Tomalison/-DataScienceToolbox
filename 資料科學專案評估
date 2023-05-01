@@ -1,0 +1,220 @@
+資料專案評估與優化
+今天想跟大家聊的主題是「資料專案評估與優化」，像是要如何評估機器學習的模型的好壞，可以有哪些通用的指標作為檢驗。機器學習模型的開發和評估是一個複雜的過程，需要結合理論和實踐。在開發機器學習模型之前，我們需要準備好資料集，然後選擇適合的模型進行訓練和測試。在評估模型時，我們需要使用不同的指標來評估模型的性能。
+https://dscareer.kolable.app/programs/9bb10c37-9d10-4dc8-9350-3b21b06b1b44/contents/8d23ad74-b768-4653-8718-e7bc7b029fb4?back=members_3c165a8c-f44c-47b7-af1b-b46de60333f1
+
+訓練集與測試集
+機器學習模型是一種根據訓練資料集進行學習的演算法，以使得其能夠從新的數據中做出正確的預測。機器學習模型可以分為監督式學習和非監督式學習。在監督式學習中，模型接受帶有正確答案的訓練資料，並學習如何從新的數據中對它們進行預測。在非監督式學習中，模型將無正確答案的數據作為輸入，並試圖發現其中的模式和關聯。當我們訓練機器學習模型時，我們需要將資料集分成訓練集和測試集。這是為了評估模型的泛化能力，也就是模型對未知資料的預測能力。在 Python 中，我們可以使用 scikit-learn 提供的 train_test_split 函數來輕鬆地分割資料集。
+
+
+首先，我們需要載入資料集。在本範例中，我們將使用 scikit-learn 提供的 iris 資料集。以下是載入資料集的程式碼：
+
+from sklearn.datasets import load_iris
+iris = load_iris()
+X = iris.data
+y = iris.target
+這段程式碼載入了 iris 資料集，並將其分成特徵矩陣 X 和標籤向量 y。
+
+分割訓練集和測試集
+
+接下來，我們需要使用 train_test_split 函數來分割訓練集和測試集。以下是分割訓練集和測試集的程式碼：
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+這段程式碼將 iris 資料集分割成訓練集和測試集，其中 test_size 參數指定了測試集的大小，這裡設為 0.2，也就是將資料集分成 80% 的訓練集和 20% 的測試集。random_state 參數指定了隨機種子，這是為了確保每次運行程式時，分割出來的訓練集和測試集都是一樣的。
+
+使用分割的資料集訓練模型
+
+最後，我們可以使用分割的訓練集和測試集來訓練機器學習模型。以下是一個簡單的示範，使用決策樹模型來對 iris 資料集進行分類：
+
+from sklearn.tree import DecisionTreeClassifier
+clf = DecisionTreeClassifier()
+clf.fit(X_train, y_train)
+這段程式碼使用 DecisionTreeClassifier 來訓練決策樹模型，並將訓練集 X_train 和 y_train 作為輸入。
+
+訓練完成後，我們可以使用測試集 X_test 來評估模型的表現：
+
+y_pred = clf.predict(X_test)
+這段程式碼使用訓練好的模型對測試集 X_test 進行預測，並將結果儲存在 y_pred 中。接下來，我們可以使用分割的測試集 y_test 和預測結果 y_pred 來評估模型的表現。
+
+評估模型表現
+以下是一個示範，使用準確率來評估決策樹模型的表現。這段程式碼使用 accuracy_score 函數來計算測試集 y_test 和預測結果 y_pred 的準確率，並將結果儲存在 accuracy 中。
+
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+除了 accuracy 之外在機器學習中有許多指標可以用來評估機器學習模型的表現，例如準確率、精確率、召回率和 F1 分數等。以下是一些常用的評估指標，以及如何在 Python 中使用它們：
+
+混淆矩陣 (Confusion Matrix)
+
+
+
+混淆矩陣是一個常見的評估指標，它可以顯示模型的預測結果與實際結果之間的關係。在 Scikit-Learn 中，我們可以使用 confusion_matrix 函數計算混淆矩陣：
+
+from sklearn.metrics import confusion_matrix
+
+
+y_true = [0, 1, 0, 1]
+y_pred = [0, 1, 1, 0]
+
+
+cm = confusion_matrix(y_true, y_pred)
+print("Confusion Matrix:\n", cm)
+混淆矩陣中的第一行表示實際為負類別的樣本，第一列表示被模型預測為負類別的樣本。混淆矩陣中的第二行表示實際為正類別的樣本，第二列表示被模型預測為正類別的樣本。可以根據混淆矩陣計算出各種指標。
+
+
+準確率 (Accuracy)
+
+準確率是最常用的評估指標之一，它是指分類正確的樣本數佔總樣本數的比例。在 Scikit-Learn 中，我們可以使用 accuracy_score 函數計算準確率：
+
+from sklearn.metrics import accuracy_score
+
+y_true = [0, 1, 0, 1]
+y_pred = [0, 1, 1, 0]
+
+accuracy = accuracy_score(y_true, y_pred)
+print("Accuracy:", accuracy)
+精確率 (Precision)
+
+精確率是指被分為正類別的樣本中，實際上為正類別的比例。在 Scikit-Learn 中，我們可以使用 precision_score 函數計算精確率：
+
+from sklearn.metrics import precision_score
+
+y_true = [0, 1, 0, 1]
+y_pred = [0, 1, 1, 0]
+
+precision = precision_score(y_true, y_pred)
+print("Precision:", precision)
+召回率 (Recall)
+
+召回率是指實際為正類別的樣本中，被分為正類別的比例。在 Scikit-Learn 中，我們可以使用 recall_score 函數計算召回率：
+
+from sklearn.metrics import recall_score
+
+y_true = [0, 1, 0, 1]
+y_pred = [0, 1, 1, 0]
+
+recall = recall_score(y_true, y_pred)
+print("Recall:", recall)
+F1 分數 (F1 Score)
+
+F1 分數是精確率和召回率的調和平均數，它綜合了兩者的表現。在 Scikit-Learn 中，我們可以使用 f1_score 函數計算 F1 分數：
+
+from sklearn.metrics import f1_score
+
+y_true = [0, 1, 0, 1]
+y_pred = [0, 1, 1, 0]
+
+f1 = f1_score(y_true, y_pred)
+print("F1 Score:", f1)
+MAE、MSE、RMSE
+
+MAE (Mean Absolute Error)、MSE (Mean Squared Error) 和 RMSE (Root Mean Squared Error) 是回歸模型中常用的評估指標。MAE 表示預測值和實際值之間的絕對誤差的平均值，MSE 表示預測值和實際值之間的平方誤差的平均值，RMSE 表示 MSE 的平方根。在 Scikit-Learn 中，我們可以使用 mean_absolute_error、mean_squared_error 和 mean_squared_error 函數分別計算 MAE、MSE 和 RMSE：
+
+from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_squared_error
+
+y_true = [1, 2, 3, 4, 5]
+y_pred = [1, 3, 2, 4, 6]
+
+mae = mean_absolute_error(y_true, y_pred)
+mse = mean_squared_error(y_true, y_pred)
+rmse = mean_squared_error(y_true, y_pred, squared=False)
+
+print("MAE:", mae)
+print("MSE:", mse)
+print("RMSE:", rmse)
+交叉驗證
+在機器學習中，我們通常會將數據集分為訓練集和測試集，用訓練集來訓練模型，用測試集來評估模型的性能。但是，這種方法的問題在於，測試集只能在模型開發過程中使用一次，這樣可能會使模型的泛化能力無法得到充分的評估。
+
+交叉驗證是一種解決這個問題的方法，它將數據集分為 k 個相等的子集，稱為「折」。然後，進行 k 次實驗，每次選擇其中一個子集作為測試集，其餘子集作為訓練集。最終，將這些實驗的結果平均化，得到一個模型的評估分數。
+
+
+在 Scikit-Learn 中，我們可以使用 cross_val_score 函數來進行交叉驗證：
+
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+
+
+# 載入鳶尾花數據集
+iris = load_iris()
+
+
+# 定義邏輯回歸模型
+log_reg = LogisticRegression()
+
+
+# 進行交叉驗證
+scores = cross_val_score(log_reg, iris.data, iris.target, cv=5)
+
+
+# 輸出結果
+print("Cross Validation Scores:", scores)
+print("Average Score:", scores.mean())
+這裡我們使用了 iris 數據集，將其分為 5 個子集進行交叉驗證，最終模型得分會將每一回合的結果平均。
+
+過度擬合
+在機器學習中，過度擬合是一個常見的問題，尤其是當模型的複雜度很高或者訓練數據集較小的情況下。過度擬合表示模型在訓練數據上表現很好，但在測試數據上表現不佳。這種現象的原因是模型過於複雜，導致在訓練數據上出現過度擬合的問題。解決這個問題的方法有很多種，包括增加訓練數據、簡化模型等。
+
+為了判斷一個模型是否存在過度擬合，我們可以使用學習曲線和驗證曲線。在 Python 中，我們可以使用 scikit-learn 套件中的 learning_curve() 和 validation_curve() 函數來繪製學習曲線和驗證曲線。
+
+import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.model_selection import learning_curve, validation_curve
+from sklearn.tree import DecisionTreeClassifier
+
+# 生成一個假的二元分類資料集
+X, y = make_classification(n_samples=1000, n_features=10, n_informative=5, n_redundant=5, random_state=42)
+
+# 建立決策樹模型
+dt = DecisionTreeClassifier(random_state=42)
+
+# 計算學習曲線
+train_sizes, train_scores, test_scores = learning_curve(estimator=dt, X=X, y=y, train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
+
+# 繪製學習曲線
+import matplotlib.pyplot as plt
+plt.plot(train_sizes, np.mean(train_scores, axis=1), 'o-', color="r", label="Training score")
+plt.plot(train_sizes, np.mean(test_scores, axis=1), 'o-', color="g", label="Cross-validation score")
+plt.xlabel("Training examples")
+plt.ylabel("Score")
+plt.legend(loc="best")
+plt.show()
+
+# 計算驗證曲線
+param_range = np.arange(1, 11)
+train_scores, test_scores = validation_curve(estimator=dt, X=X, y=y, param_name="max_depth", param_range=param_range, cv=5)
+
+# 繪製驗證曲線
+plt.plot(param_range, np.mean(train_scores, axis=1), 'o-', color="r", label="Training score")
+plt.plot(param_range, np.mean(test_scores, axis=1), 'o-', color="g", label="Cross-validation score")
+plt.xlabel("Max depth")
+plt.ylabel("Score")
+plt.legend(loc="best")
+plt.show()
+因為在上面的範例中，我們首先生成一個假的二元分類資料集，然後建立一個決策樹模型。接下來，我們使用 learning_curve() 函數計算學習曲線，並使用 validation_curve() 函數計算驗證曲線。
+
+## 學習曲線
+
+如果模型存在過度擬合的問題，學習曲線會顯示出訓練分數高於交叉驗證分數
+
+
+## 驗證曲線
+
+
+如果模型存在過度擬合的問題，驗證曲線則會顯示出隨著模型複雜度增加，訓練分數增加而驗證分數下降（可以觀察圖上是否有呈現開口的狀況）。
+
+上面的範例中，我們使用了學習曲線和驗證曲線來檢查決策樹模型是否存在過度擬合的問題。如果存在，可以使用以下方法來解決：
+
+簡化模型：減少特徵數量，降低模型複雜度。
+收集更多資料：增加訓練資料量，減少訓練資料的噪聲。
+使用正則化：在模型訓練過程中加入正則化項，控制模型複雜度
+延伸閱讀
+因為這個單元比較實務跟彈性一點，所以我們挑選以下幾個素材：
+
+機器學習\統計方法: 模型評估-驗證指標(validation index) ← 必修教材
+如何辨別機器學習模型的好壞？秒懂Confusion Matri ← 必修教材
+【机器学习】sklearn中的回归问题性能评估方法 ← 必修教材
+python sklearn中分类问题的评估方法 ← 必修教材
+[Day29]機器學習：交叉驗證！ ← 必修教材Frequent itemsets via the Apriori algorithm ← 必修教材
+Association rules generation from frequent itemsets ← 必修教材
+挖掘關聯規則(Mining Association Rules) ← 選修教材
